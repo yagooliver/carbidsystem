@@ -32,8 +32,8 @@ namespace CarBidSystem.Bids.UseCases.Bids.Handlers
                 throw new ApplicationException($"This Auction - {auction.AuctionId} has already finished and it's not accepting more bids");
             }
 
-            Bid bid = new(request.AuctionId, request.UserId, request.Amount);
-            
+            Bid bid = new(auction.Id, request.UserId, request.Amount);
+
             await bidRepository.AddAsync(bid);
 
             Log.Information($"Bid - {bid.Id} saved successfully");

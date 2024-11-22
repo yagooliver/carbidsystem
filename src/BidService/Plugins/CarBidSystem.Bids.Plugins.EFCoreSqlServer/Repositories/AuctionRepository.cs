@@ -18,7 +18,7 @@ namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Repositories
         public async Task<Auction?> GetAuctionByIdAsync(int auctionId)
         {
             using var db = dbContext.CreateDbContext();
-            var auction = await db.Auctions.FirstOrDefaultAsync(x => x.AuctionId == auctionId);
+            var auction = await db.Auctions.AsNoTracking().FirstOrDefaultAsync(x => x.AuctionId == auctionId);
             return auction;
         }
     }

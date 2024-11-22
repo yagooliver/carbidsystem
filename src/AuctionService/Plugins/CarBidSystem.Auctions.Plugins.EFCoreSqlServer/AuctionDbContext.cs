@@ -42,6 +42,11 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer
                     new("Volkswagen", "Passat", 2019, 20000m) { Id = 9},
                     new("Hyundai", "Elantra", 2022, 18000m) { Id = 10}
                 ]);
+
+            modelBuilder.Entity<Auction>()
+                .HasData([
+                    new(1, DateTime.UtcNow, DateTime.UtcNow.AddDays(5)) { Id = 1, State = AuctionState.Created},
+                ]);
         }
     }
 }

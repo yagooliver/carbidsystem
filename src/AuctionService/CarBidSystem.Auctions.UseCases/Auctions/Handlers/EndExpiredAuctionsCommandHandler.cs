@@ -10,7 +10,7 @@ namespace CarBidSystem.Auctions.UseCases.Auctions.Handlers
     {
         public async Task Handle(EndExpiredAuctionsCommand request, CancellationToken cancellationToken)
         {
-            var auctions = await auctionRepository.GetUpcomingAuctionsAsync();
+            var auctions = await auctionRepository.GetUpcomingEndAuctionsAsync();
 
             foreach (var auction in auctions)
             {

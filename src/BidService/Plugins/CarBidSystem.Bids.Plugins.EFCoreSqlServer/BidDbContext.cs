@@ -13,6 +13,9 @@ namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer
             modelBuilder.Entity<Auction>()
                 .HasKey(e => e.Id);
 
+            modelBuilder.Entity<Auction>()
+                .HasIndex(e => e.AuctionId).IsUnique();
+
             modelBuilder.Entity<Bid>()
                 .HasOne(e => e.Auction)
                 .WithMany(e => e.Bids)

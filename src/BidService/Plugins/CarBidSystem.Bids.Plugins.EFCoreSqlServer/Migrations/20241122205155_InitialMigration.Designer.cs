@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Migrations
 {
     [DbContext(typeof(BidDbContext))]
-    [Migration("20241120224235_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20241122205155_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,9 @@ namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuctionId")
+                        .IsUnique();
 
                     b.ToTable("Auctions");
                 });

@@ -14,12 +14,12 @@ namespace CarBidSystem.Auctions.UseCases.Auctions.Handlers
 
             foreach (var auction in auctions)
             {
-                auction.State = CarBidSystem.Auctions.CoreBusiness.Entities.AuctionState.Started;
+                auction.State = CoreBusiness.Entities.AuctionState.Started;
                 auction.UpdatedAt = DateTime.UtcNow;
 
                 await auctionRepository.UpdateAuctionAsync(auction);
 
-                await publishEndpoint.Publish(new AuctionStartedEvent { ActionId = auction.Id }); 
+                await publishEndpoint.Publish(new AuctionStartedEvent { AuctionId = auction.Id, EndTime = auction.EndTime, StartTime = auction.StartTime, State = (int)auction.State }, cancellationToken); 
             }
         }
     }

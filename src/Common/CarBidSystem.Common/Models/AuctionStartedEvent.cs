@@ -8,6 +8,9 @@ namespace CarBidSystem.Common.Models
 {
     public class AuctionStartedEvent
     {
-        public int ActionId { get; set; }
+        public int AuctionId { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int State { get; set; }
     }
 }

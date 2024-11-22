@@ -1,5 +1,6 @@
 ﻿using CarBidSystem.Bids.CoreBusiness.DTOs;
 using CarBidSystem.Bids.IntegrationTests.Configurations;
+using CarBidSystem.Common.Response;
 using FluentAssertions;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
@@ -146,17 +147,23 @@ namespace CarBidSystem.Bids.IntegrationTests.Controllers
             // Act
             var response = await _client.PostAsJsonAsync("/api/bid", payload);
 
-            // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
 
-            // Act
-            var bidResponse = await _client.GetAsync($"/api/bid/{1}/bids");
+            int pageNumber = 1;
+            int pageSize = 5;
+            var bidResponse = await _client.GetAsync($"/api/bid/1/bids?pageNumber={pageNumber}&pageSize={pageSize}");
 
-            var bids = JsonConvert.DeserializeObject<List<BidDto>>(await bidResponse.Content.ReadAsStringAsync());
+            var paginatedResponse = JsonConvert.DeserializeObject<PagedResponse<List<BidDto>>>(
+                await bidResponse.Content.ReadAsStringAsync());
 
             // Assert
             bidResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            bids?.Count.Should().BeGreaterThan(0);
+            paginatedResponse.Should().NotBeNull();
+            paginatedResponse?.Data.Should().NotBeEmpty();
+            paginatedResponse?.PageNumber.Should().Be(pageNumber);
+            paginatedResponse?.PageSize.Should().Be(pageSize);
+            paginatedResponse?.TotalRecords.Should().BeGreaterThan(0);
+            paginatedResponse?.Data.Count.Should().BeLessOrEqualTo(pageSize);
         }
     }
 }

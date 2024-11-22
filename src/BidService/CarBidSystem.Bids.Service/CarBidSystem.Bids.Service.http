@@ -1,6 +1,24 @@
-@CarBidSystem.Bids.Service_HostAddress = http://localhost:5026
+@CarBidSystem.Bids.Service_HostAddress = http://localhost:10091
 
-GET {{CarBidSystem.Bids.Service_HostAddress}}/weatherforecast/
-Accept: application/json
+###
+### Place a bid
+POST {{CarBidSystem.Bids.Service_HostAddress}}/api/bid
+Content-Type: application/json
+
+{
+  "AuctionId": 1,
+  "Amount": 100.50,
+  "UserId": "test-user"
+}
+
+###
+
+### Get all bids for a specific auction
+GET {{CarBidSystem.Bids.Service_HostAddress}}/api/bid/1/bids
+
+###
+
+### Get a specific bid by bid ID
+GET {{CarBidSystem.Bids.Service_HostAddress}}/api/bid/2
 
 ###

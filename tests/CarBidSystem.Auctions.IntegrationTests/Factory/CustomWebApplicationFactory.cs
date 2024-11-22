@@ -1,5 +1,6 @@
 ﻿using CarBidSystem.Auctions.CoreBusiness.Entities;
 using CarBidSystem.Auctions.Plugins.EFCoreSqlServer;
+using CarBidSystem.Auctions.Service.Services;
 using CarBidSystem.Auctions.UseCases.Consumers;
 using CarBidSystem.Common.Configurations;
 using MassTransit;
@@ -197,6 +198,23 @@ namespace CarBidSystem.Auctions.IntegrationTests.Factory
                     var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
                     return multiplexer.GetDatabase();
                 });
+
+                // Remove the hosted services
+                var hostedServiceTypes = new[]
+                {
+                    typeof(StartUpcomingAuctionsService),
+                    typeof(EndExpiredAuctionsService)
+                };
+
+                foreach (var hostedServiceType in hostedServiceTypes)
+                {
+                    var hostedServiceDescriptor = services.SingleOrDefault(
+                        d => d.ServiceType == hostedServiceType);
+                    if (hostedServiceDescriptor != null)
+                    {
+                        services.Remove(hostedServiceDescriptor);
+                    }
+                }
             });
 
             // Set the test environment

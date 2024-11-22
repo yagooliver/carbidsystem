@@ -1,5 +1,4 @@
-﻿
-using CarBidSystem.Auctions.UseCases.Auctions.Commands;
+﻿using CarBidSystem.Auctions.UseCases.Auctions.Commands;
 using CarBidSystem.Common.Configurations;
 using MediatR;
 using Microsoft.Extensions.Options;

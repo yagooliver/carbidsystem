@@ -1,7 +1,9 @@
 ﻿using CarBidSystem.Bids.CoreBusiness.DTOs;
 using CarBidSystem.Bids.UseCases.Bids.Commands;
+using CarBidSystem.Common.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 
 namespace CarBidSystem.Bids.Service.Controllers
 {
@@ -22,12 +24,13 @@ namespace CarBidSystem.Bids.Service.Controllers
         }
 
         [HttpGet("{auctionId}/bids")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(PagedResponse<List<BidDto>>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetBidsByAction(int auctionId)
+        public async Task<IActionResult> GetBidsByAction(int auctionId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var bids = await mediator.Send(new GetBidsByActionIdCommand(auctionId));
-            return Ok(bids);
+            var command = new GetBidsByActionIdCommand(auctionId, pageNumber, pageSize);
+            var result = await mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpGet("{bidId}")]

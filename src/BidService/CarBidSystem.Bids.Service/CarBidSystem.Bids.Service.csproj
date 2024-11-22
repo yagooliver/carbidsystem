@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Plugins\CarBidSystem.Bids.Plugins.RedisCaching\CarBidSystem.Bids.Plugins.RedisCaching.csproj" />
     <ProjectReference Include="..\..\Common\CarBidSystem.Common\CarBidSystem.Common.csproj" />
     <ProjectReference Include="..\CarBidSystem.Bids.CoreBusiness\CarBidSystem.Bids.CoreBusiness.csproj" />
     <ProjectReference Include="..\CarBidSystem.Bids.UseCases\CarBidSystem.Bids.UseCases.csproj" />
     <ProjectReference Include="..\Plugins\CarBidSystem.Bids.Plugins.EFCoreSqlServer\CarBidSystem.Bids.Plugins.EFCoreSqlServer.csproj" />
-    <ProjectReference Include="..\Plugins\CarBidSystem.Bids.Plugins.InMemory\CarBidSystem.Bids.Plugins.InMemory.csproj" />
   </ItemGroup>
 
 </Project>

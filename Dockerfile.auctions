@@ -14,7 +14,6 @@ COPY src/AuctionService/CarBidSystem.Auctions.CoreBusiness/ ./src/AuctionService
 COPY src/Common/CarBidSystem.Common/ ./src/Common/CarBidSystem.Common/
 COPY src/AuctionService/Plugins/CarBidSystem.Auctions.Plugins.EFCoreSqlServer/ ./src/AuctionService/Plugins/CarBidSystem.Auctions.Plugins.EFCoreSqlServer/
 COPY src/AuctionService/Plugins/CarBidSystem.Auctions.Plugins.RedisCaching/ ./src/AuctionService/Plugins/CarBidSystem.Auctions.Plugins.RedisCaching/
-COPY src/AuctionService/Plugins/CarBidSystem.Auctions.Plugins.InMemory/ ./src/AuctionService/Plugins/CarBidSystem.Auctions.Plugins.InMemory/
 
 RUN dotnet restore ./src/AuctionService/CarBidSystem.Auctions.Service/CarBidSystem.Auctions.Service.csproj
 

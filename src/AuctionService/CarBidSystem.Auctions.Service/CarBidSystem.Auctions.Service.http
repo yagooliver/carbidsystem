@@ -1,6 +1,24 @@
 @CarBidSystem.Auctions.Service_HostAddress = http://localhost:5038
 
-GET {{CarBidSystem.Auctions.Service_HostAddress}}/weatherforecast/
-Accept: application/json
+###
+### Create a new auction
+POST {{CarBidSystem.Auctions.Service_HostAddress}}/api/auctions
+Content-Type: application/json
+
+{
+  "CarId": 1,
+  "StartTime": "2024-11-23T10:00:00Z",
+  "EndTime": "2024-11-30T10:00:00Z"
+}
+
+###
+
+### Get all auctions
+GET {{CarBidSystem.Auctions.Service_HostAddress}}/api/auctions
+
+###
+
+### Get auction by ID
+GET {{CarBidSystem.Auctions.Service_HostAddress}}/api/auctions/1
 
 ###

@@ -23,9 +23,10 @@ namespace CarBidSystem.Auctions.Service.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<AuctionDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            return Ok(await mediator.Send(new GetAuctionsCommand()));
+            var command = new GetAuctionsCommand(pageNumber, pageSize);
+            return Ok(await mediator.Send(command));
         }
 
         [HttpGet("{auctionId}")]

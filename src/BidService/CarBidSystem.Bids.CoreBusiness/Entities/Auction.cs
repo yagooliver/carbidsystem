@@ -9,6 +9,7 @@ namespace CarBidSystem.Bids.CoreBusiness.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        
         public int AuctionId { get; set; } = auctionId;
         public DateTime StartedAt { get; set; } = startedAt;
         public DateTime EndDate { get; set; } = endDate;

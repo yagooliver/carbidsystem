@@ -27,6 +27,22 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Repositories
             return await db.Auctions.ToListAsync();
         }
 
+        public async Task<(List<Auction>, int)> GetPaginatedAuctionsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            using var db = dbContext.CreateDbContext();
+
+            var query = db.Auctions.Include(x => x.Car).AsQueryable();
+
+            var totalRecords = await query.CountAsync(cancellationToken);
+
+            var auctions = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return (auctions, totalRecords);
+        }
+
         public async Task<List<Auction>> GetUpcomingAuctionsAsync()
         {
             using var db = dbContext.CreateDbContext();
@@ -40,7 +56,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Repositories
         {
             using var db = dbContext.CreateDbContext();
 
-            var auctions = await db.Auctions.Where(x => x.State == AuctionState.Started && x.EndTime >= DateTime.UtcNow).ToListAsync();
+            var auctions = await db.Auctions.Where(x => x.State != AuctionState.Ended && x.EndTime <= DateTime.UtcNow).ToListAsync();
 
             return auctions;
         }

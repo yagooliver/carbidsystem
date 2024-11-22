@@ -24,7 +24,7 @@ namespace CarBidSystem.Auctions.Plugins.RedisCaching
 
             // Attempt to get auction from Redis
             var cachedAuction = await redisDatabase.StringGetAsync(cacheKey);
-            if (!cachedAuction.IsNullOrEmpty)
+            if (!cachedAuction.IsNullOrEmpty && cachedAuction.HasValue)
             {
                 return JsonSerializer.Deserialize<Auction>(cachedAuction);
             }
@@ -41,64 +41,34 @@ namespace CarBidSystem.Auctions.Plugins.RedisCaching
             return auction;
         }
 
-        public async Task<List<Auction>> GetAuctionsAsync()
+        public async Task<(List<Auction>, int)> GetPaginatedAuctionsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            string cacheKey = "auction:all";
+            string cacheKey = $"auction:paginated:{pageNumber}:{pageSize}";
 
-            // Attempt to get cached auctions
-            var cachedAuctions = await redisDatabase.StringGetAsync(cacheKey);
-            if (!cachedAuctions.IsNullOrEmpty && cachedAuctions != "[]")
+            // Attempt to get cached paginated data
+            var cachedData = await redisDatabase.StringGetAsync(cacheKey);
+            if (!cachedData.IsNullOrEmpty && cachedData.HasValue)
             {
-                return JsonSerializer.Deserialize<List<Auction>>(cachedAuctions)!;
+                return JsonSerializer.Deserialize<(List<Auction>, int)>(cachedData)!;
             }
 
-            // Fallback to the underlying repository
-            var auctions = await auctionRepository.GetAuctionsAsync();
+            // Fallback to repository
+            var result = await auctionRepository.GetPaginatedAuctionsAsync(pageNumber, pageSize, cancellationToken);
 
             // Cache the result
-            await redisDatabase.StringSetAsync(cacheKey, JsonSerializer.Serialize(auctions), TimeSpan.FromMinutes(10));
+            await redisDatabase.StringSetAsync(cacheKey, JsonSerializer.Serialize(result), TimeSpan.FromMinutes(10));
 
-            return auctions;
+            return result;
         }
 
         public async Task<List<Auction>> GetUpcomingAuctionsAsync()
         {
-            string cacheKey = "auction:upcoming";
-
-            // Attempt to get cached upcoming auctions
-            var cachedAuctions = await redisDatabase.StringGetAsync(cacheKey);
-            if (!cachedAuctions.IsNullOrEmpty && cachedAuctions != "[]")
-            {
-                return JsonSerializer.Deserialize<List<Auction>>(cachedAuctions)!;
-            }
-
-            // Fallback to the underlying repository
-            var auctions = await auctionRepository.GetUpcomingAuctionsAsync();
-
-            // Cache the result
-            await redisDatabase.StringSetAsync(cacheKey, JsonSerializer.Serialize(auctions), TimeSpan.FromMinutes(10));
-
-            return auctions;
+            return await auctionRepository.GetUpcomingAuctionsAsync();
         }
 
         public async Task<List<Auction>> GetUpcomingEndAuctionsAsync()
         {
-            string cacheKey = "auction:upcomingend";
-
-            // Attempt to get cached upcoming end auctions
-            var cachedAuctions = await redisDatabase.StringGetAsync(cacheKey);
-            if (!cachedAuctions.IsNullOrEmpty)
-            {
-                return JsonSerializer.Deserialize<List<Auction>>(cachedAuctions)!;
-            }
-
-            // Fallback to the underlying repository
-            var auctions = await auctionRepository.GetUpcomingEndAuctionsAsync();
-
-            // Cache the result
-            await redisDatabase.StringSetAsync(cacheKey, JsonSerializer.Serialize(auctions), TimeSpan.FromMinutes(10));
-
-            return auctions;
+            return await auctionRepository.GetUpcomingEndAuctionsAsync();
         }
 
         public async Task UpdateAuctionAsync(Auction auction)

@@ -25,39 +25,14 @@ namespace CarBidSystem.Auctions.Service
 
         public static void AddRepositories(this IServiceCollection services, IWebHostEnvironment environment)
         {
-            if(environment.IsEnvironment("Testing"))
+            services.AddScoped<AuctionRepository>();
+            services.AddScoped<IAuctionRepository>(provider =>
             {
-                services.AddSingleton<IAuctionRepository, Plugins.InMemory.AuctionRepository>();
-                services.AddSingleton<ICarRepository, Plugins.InMemory.CarRepository>();
-            }
-            else
-            {
-                services.AddScoped<AuctionRepository>();
-                services.AddScoped<IAuctionRepository>(provider =>
-                {
-                    var repository = provider.GetRequiredService<AuctionRepository>();
-                    var redis = provider.GetRequiredService<IDatabase>();
-                    return new AuctionCacheRepository(repository, redis);
-                });
-                services.AddScoped<ICarRepository, CarRepository>();
-            }
-        }
-
-        public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton<IConnectionMultiplexer>(sp =>
-            {
-                string? config = configuration.GetConnectionString("RedisConnection");
-                return config is null
-                    ? throw new ArgumentNullException("Redis Connection string cannot be null")
-                    : (IConnectionMultiplexer)ConnectionMultiplexer.Connect(config);
+                var repository = provider.GetRequiredService<AuctionRepository>();
+                var redis = provider.GetRequiredService<IDatabase>();
+                return new AuctionCacheRepository(repository, redis);
             });
-
-            services.AddScoped(sp =>
-            {
-                var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
-                return multiplexer.GetDatabase();
-            });
+            services.AddScoped<ICarRepository, CarRepository>();
         }
     }
 }
