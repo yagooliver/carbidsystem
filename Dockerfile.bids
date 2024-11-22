@@ -1,0 +1,36 @@
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /
+
+# Install global tools and trust HTTPS development certificates
+RUN dotnet tool install --global dotnet-certificate-tool
+RUN dotnet dev-certs https --trust
+
+# Copy solution and restore dependencies
+COPY CarBidSystem.sln ./
+COPY src/BidService/CarBidSystem.Bids.Service/ ./src/BidService/CarBidSystem.Bids.Service/
+COPY src/BidService/CarBidSystem.Bids.UseCases/ ./src/BidService/CarBidSystem.Bids.UseCases/
+COPY src/BidService/CarBidSystem.Bids.CoreBusiness/ ./src/BidService/CarBidSystem.Bids.CoreBusiness/
+COPY src/Common/CarBidSystem.Common/ ./src/Common/CarBidSystem.Common/
+COPY src/BidService/Plugins/CarBidSystem.Bids.Plugins.EFCoreSqlServer/ ./src/BidService/Plugins/CarBidSystem.Bids.Plugins.EFCoreSqlServer/
+COPY src/BidService/Plugins/CarBidSystem.Bids.Plugins.InMemory/ ./src/BidService/Plugins/CarBidSystem.Bids.Plugins.InMemory/
+
+# Exclude the InMemory project
+RUN dotnet restore ./src/BidService/CarBidSystem.Bids.Service/CarBidSystem.Bids.Service.csproj
+
+# Build and publish the application
+RUN dotnet publish ./src/BidService/CarBidSystem.Bids.Service/CarBidSystem.Bids.Service.csproj -c Release -o app/publish
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /publish
+COPY --from=build-env /app/publish .
+
+# Set environment variables and expose ports
+# Set environment variables and expose ports
+ENV ASPNETCORE_URLS=http://+:80;https://+:443
+EXPOSE 80/tcp
+EXPOSE 443/tcp
+
+# Start the service
+ENTRYPOINT ["dotnet", "CarBidSystem.Bids.Service.dll", "--server.urls", "http://*:80;https://*:443"]

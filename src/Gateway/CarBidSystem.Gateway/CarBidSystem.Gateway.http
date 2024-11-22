@@ -1,0 +1,6 @@
+@CarBidSystem.Gateway_HostAddress = http://localhost:5082
+
+GET {{CarBidSystem.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
