@@ -1,17 +1,26 @@
 ﻿using CarBidSystem.Bids.CoreBusiness.DTOs;
 using CarBidSystem.Bids.CoreBusiness.Interfaces;
 using CarBidSystem.Bids.UseCases.Bids.Commands;
+using CarBidSystem.Common.Response;
 using MediatR;
 
 namespace CarBidSystem.Bids.UseCases.Bids.Handlers
 {
-    public class GetBidsByActionIdCommandHandler(IBidRepository bidRepository) : IRequestHandler<GetBidsByActionIdCommand, List<BidDto>>
+    public class GetBidsByActionIdCommandHandler(IBidRepository bidRepository) : IRequestHandler<GetBidsByActionIdCommand, PagedResponse<List<BidDto>>>
     {
-        public async Task<List<BidDto>> Handle(GetBidsByActionIdCommand request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<List<BidDto>>> Handle(GetBidsByActionIdCommand request, CancellationToken cancellationToken)
         {
-            var bids = (await bidRepository.GetAllBidsByAuctionIdAsync(request.ActionId))?.Select(x => new BidDto(x.Id, x.AuctionId, x.CreatedAt, x.Amount)).ToList();
+            var (bids, totalRecords) = await bidRepository.GetPaginatedBidsByAuctionIdAsync(
+                request.ActionId,
+                request.PageNumber,
+                request.PageSize,
+                cancellationToken
+            );
 
-            return bids ?? [];
+            var bidDtos = bids.Select(x => new BidDto(x.Id, x.AuctionId, x.CreatedAt, x.Amount)).ToList();
+
+            var response = new PagedResponse<List<BidDto>>(bidDtos, request.PageNumber, request.PageSize, totalRecords);
+            return response;
         }
     }
 }

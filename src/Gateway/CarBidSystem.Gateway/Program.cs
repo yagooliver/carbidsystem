@@ -32,4 +32,9 @@ var app = builder.Build();
 app.MapReverseProxy();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.MapGet("/", () =>
+{
+    return "Car bid system gateway";
+});
 app.Run();

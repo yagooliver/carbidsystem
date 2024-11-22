@@ -37,6 +37,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<PlaceBidCommandConsumer>();    
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.ConcurrentMessageLimit = 1;
+        cfg.UseConcurrencyLimit(1);
+
         var rabbitMqSettings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
         cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost, h =>
         {
@@ -111,7 +114,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/health", () =>
+{
+    return "Car bid system Auction service";
+});
 await app.RunAsync();
 
 

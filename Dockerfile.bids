@@ -13,9 +13,8 @@ COPY src/BidService/CarBidSystem.Bids.UseCases/ ./src/BidService/CarBidSystem.Bi
 COPY src/BidService/CarBidSystem.Bids.CoreBusiness/ ./src/BidService/CarBidSystem.Bids.CoreBusiness/
 COPY src/Common/CarBidSystem.Common/ ./src/Common/CarBidSystem.Common/
 COPY src/BidService/Plugins/CarBidSystem.Bids.Plugins.EFCoreSqlServer/ ./src/BidService/Plugins/CarBidSystem.Bids.Plugins.EFCoreSqlServer/
-COPY src/BidService/Plugins/CarBidSystem.Bids.Plugins.InMemory/ ./src/BidService/Plugins/CarBidSystem.Bids.Plugins.InMemory/
+COPY src/BidService/Plugins/CarBidSystem.Bids.Plugins.RedisCaching/ ./src/BidService/Plugins/CarBidSystem.Bids.Plugins.RedisCaching/
 
-# Exclude the InMemory project
 RUN dotnet restore ./src/BidService/CarBidSystem.Bids.Service/CarBidSystem.Bids.Service.csproj
 
 # Build and publish the application

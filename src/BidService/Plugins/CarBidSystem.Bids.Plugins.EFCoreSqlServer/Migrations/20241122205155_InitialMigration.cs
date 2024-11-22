@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,6 +48,12 @@ namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Auctions_AuctionId",
+                table: "Auctions",
+                column: "AuctionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bids_AuctionId",

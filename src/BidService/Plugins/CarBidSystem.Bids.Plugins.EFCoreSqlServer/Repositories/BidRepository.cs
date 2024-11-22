@@ -32,5 +32,21 @@ namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Repositories
             using var db = contextFactory.CreateDbContext();
             return await (db.Bids?.FirstOrDefaultAsync(x => x.Id == id) ?? Task.FromResult<Bid?>(null));
         }
+
+        public async Task<(List<Bid>, int)> GetPaginatedBidsByAuctionIdAsync(int auctionId, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            using var db = contextFactory.CreateDbContext();
+
+            var totalRecords = await db.Bids.Where(x => x.AuctionId == auctionId).CountAsync(cancellationToken);
+
+            var bids = await db.Bids
+                .Where(x => x.AuctionId == auctionId)
+                .OrderBy(x => x.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return (bids, totalRecords);
+        }
     }
 }

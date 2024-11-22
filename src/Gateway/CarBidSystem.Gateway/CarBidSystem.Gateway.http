@@ -1,6 +1,41 @@
 @CarBidSystem.Gateway_HostAddress = http://localhost:5082
 
-GET {{CarBidSystem.Gateway_HostAddress}}/weatherforecast/
-Accept: application/json
+###
+### Read auctions (GET)
+GET {{CarBidSystem.Gateway_HostAddress}}/auctions
+Content-Type: application/json
+
+###
+
+### Create a new auction (POST)
+POST {{CarBidSystem.Gateway_HostAddress}}/auctions
+Content-Type: application/json
+
+{
+  "CarId": 2,
+  "StartTime": "2024-11-22T11:00:00Z",
+  "EndTime": "2024-11-30T10:00:00Z"
+}
+###
+
+### Create a bid (POST)
+POST {{CarBidSystem.Gateway_HostAddress}}/bids
+Content-Type: application/json
+
+{
+  "AuctionId":3,
+  "Amount": 200.50,
+  "UserId": "test-user"
+}
+
+###
+
+### Read bids for an auction (GET)
+GET {{CarBidSystem.Gateway_HostAddress}}/bids/2/bids
+
+###
+
+### Read a specific bid (GET)
+GET {{CarBidSystem.Gateway_HostAddress}}/bids/3
 
 ###

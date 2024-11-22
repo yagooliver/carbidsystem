@@ -41,6 +41,9 @@ namespace CarBidSystem.Bids.Plugins.EFCoreSqlServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuctionId")
+                        .IsUnique();
+
                     b.ToTable("Auctions");
                 });
 

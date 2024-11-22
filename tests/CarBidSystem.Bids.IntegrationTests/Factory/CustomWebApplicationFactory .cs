@@ -3,6 +3,7 @@ using CarBidSystem.Bids.Plugins.EFCoreSqlServer;
 using CarBidSystem.Bids.Service;
 using CarBidSystem.Bids.UseCases.Consumers;
 using CarBidSystem.Common.Configurations;
+using FluentAssertions.Common;
 using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Testcontainers.MsSql;
 using Testcontainers.RabbitMq;
+using Testcontainers.Redis;
 
 namespace CarBidSystem.Bids.IntegrationTests.Configurations
 {
@@ -27,8 +30,10 @@ namespace CarBidSystem.Bids.IntegrationTests.Configurations
 
         private MsSqlContainer? sqlContainer;
         private RabbitMqContainer? rabbitMqContainer;
+        private RedisContainer? redisContainer;
         public string? SqlConnectionString => sqlContainer?.GetConnectionString();
         public string? RabbitMqHost => rabbitMqContainer?.Hostname;
+        public string RedisConnectionString => $"{redisContainer.Hostname}:{redisContainer.GetMappedPublicPort(6379)}";
 
         public async Task InitializeAsync()
         {
@@ -52,6 +57,15 @@ namespace CarBidSystem.Bids.IntegrationTests.Configurations
             }
 
             await rabbitMqContainer.StartAsync();
+
+            if (redisContainer == null)
+            {
+                redisContainer = new RedisBuilder()
+                    .WithImage("redis:6.2-alpine")
+                    .Build();
+            }
+
+            await redisContainer.StartAsync();
         }
 
         private async Task SeedDatabaseAsync()
@@ -69,7 +83,7 @@ namespace CarBidSystem.Bids.IntegrationTests.Configurations
             // Seed test data
             if (!await context.Auctions.AnyAsync())
             {
-                context.Auctions.Add(new(1,DateTime.UtcNow,DateTime.UtcNow.AddDays(2)));
+                context.Auctions.Add(new(1, DateTime.UtcNow, DateTime.UtcNow.AddDays(2)));
 
                 await context.SaveChangesAsync();
             }
@@ -85,7 +99,7 @@ namespace CarBidSystem.Bids.IntegrationTests.Configurations
             using var context = new BidDbContext(options);
 
             // Seed test data
-            context.Auctions.Add(new(1, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow));
+            context.Auctions.Add(new(2, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow));
 
             await context.SaveChangesAsync();
         }
@@ -137,58 +151,77 @@ namespace CarBidSystem.Bids.IntegrationTests.Configurations
                     services.Remove(descriptor);
                 }
 
-                 services.AddDbContext<BidDbContext>(options =>
-                 {
-                     options.UseSqlServer(SqlConnectionString);
-                 });
+                services.AddDbContext<BidDbContext>(options =>
+                {
+                    options.UseSqlServer(SqlConnectionString);
+                });
 
-                 // Override RabbitMQ configuration
-                 services.Configure<RabbitMqSettings>(config =>
-                 {
-                     config.Host = RabbitMqHost;
-                     config.VirtualHost = "/";
-                     config.Username = "guest";
-                     config.Password = "guest";
-                     config.QueueName = "bid-service-test";
-                 });
-                 //var massTransitDescriptors = services
-                 //    .Where(d => d.ServiceType.Namespace == "MassTransit" || d.ImplementationType?.Namespace == "MassTransit")
-                 //    .ToList();
+                // Override RabbitMQ configuration
+                services.Configure<RabbitMqSettings>(config =>
+                {
+                    config.Host = RabbitMqHost;
+                    config.VirtualHost = "/";
+                    config.Username = "guest";
+                    config.Password = "guest";
+                    config.QueueName = "bid-service-test";
+                });
+                //var massTransitDescriptors = services
+                //    .Where(d => d.ServiceType.Namespace == "MassTransit" || d.ImplementationType?.Namespace == "MassTransit")
+                //    .ToList();
 
-                 //foreach (var desc in massTransitDescriptors)
-                 //{
-                 //    services.Remove(desc);
-                 //}
-                 //services.AddMassTransitTestHarness(x =>
-                 //{
-                 //    x.AddConsumer<AuctionCreatedConsumer>();
+                //foreach (var desc in massTransitDescriptors)
+                //{
+                //    services.Remove(desc);
+                //}
+                //services.AddMassTransitTestHarness(x =>
+                //{
+                //    x.AddConsumer<AuctionCreatedConsumer>();
 
-                 //    x.UsingRabbitMq((context, cfg) =>
-                 //    {
-                 //        var rabbitMqSettings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
-                 //        cfg.Host(rabbitMqSettings.Host, "/", h =>
-                 //        {
-                 //            h.Username(rabbitMqSettings.Username);
-                 //            h.Password(rabbitMqSettings.Password);
-                 //        });
+                //    x.UsingRabbitMq((context, cfg) =>
+                //    {
+                //        var rabbitMqSettings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
+                //        cfg.Host(rabbitMqSettings.Host, "/", h =>
+                //        {
+                //            h.Username(rabbitMqSettings.Username);
+                //            h.Password(rabbitMqSettings.Password);
+                //        });
 
-                 //        cfg.ReceiveEndpoint(rabbitMqSettings.QueueName, e =>
-                 //        {
-                 //            e.ConfigureConsumer<AuctionCreatedConsumer>(context);
-                 //        });
-                 //    });
-                 //});
+                //        cfg.ReceiveEndpoint(rabbitMqSettings.QueueName, e =>
+                //        {
+                //            e.ConfigureConsumer<AuctionCreatedConsumer>(context);
+                //        });
+                //    });
+                //});
 
-                 services.AddMassTransitTestHarness(x =>
-                 {
+                services.AddMassTransitTestHarness(x =>
+                {
                     x.AddConsumer<AuctionCreatedConsumer>();
-
+                    x.AddConsumer<AuctionStartedConsumer>();
                     x.UsingInMemory((context, cfg) =>
-                    {
-                        cfg.ConfigureEndpoints(context);
-                    });
-                 });
-             });
+                     {
+                       cfg.ConfigureEndpoints(context);
+                   });
+                });
+
+                // Replace Redis configuration
+                var redisDescriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(IConnectionMultiplexer));
+                if (redisDescriptor != null)
+                {
+                    services.Remove(redisDescriptor);
+                }
+
+                services.AddSingleton<IConnectionMultiplexer>(_ =>
+                {
+                    return ConnectionMultiplexer.Connect(RedisConnectionString);
+                });
+
+                services.AddScoped(sp =>
+                {
+                    var multiplexer = sp.GetRequiredService<IConnectionMultiplexer>();
+                    return multiplexer.GetDatabase();
+                });
+            });
 
             // Set the test environment
             builder.UseEnvironment("IntegrationTest");

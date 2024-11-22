@@ -22,8 +22,4 @@
 	  <ProjectReference Include="..\..\CarBidSystem.Bids.CoreBusiness\CarBidSystem.Bids.CoreBusiness.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Migrations\" />
-	</ItemGroup>
-
 </Project>

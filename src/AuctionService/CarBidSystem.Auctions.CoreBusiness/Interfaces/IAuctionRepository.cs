@@ -8,7 +8,7 @@ namespace CarBidSystem.Auctions.CoreBusiness.Interfaces
         Task<Auction> GetAuctionAsync(int auctionId);
         Task<List<Auction>> GetUpcomingAuctionsAsync();
         Task<List<Auction>> GetUpcomingEndAuctionsAsync();
-        Task<List<Auction>> GetAuctionsAsync();
+        Task<(List<Auction>, int)> GetPaginatedAuctionsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
         Task UpdateAuctionAsync(Auction auction);
     }
 }

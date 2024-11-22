@@ -27,7 +27,7 @@ builder.Services.AddDbContextFactory<BidDbContext>(options =>
 builder.Services.AddCommands();
 builder.Services.AddValidators();
 builder.Services.AddRepositories(builder.Environment);
-
+builder.Services.ConfigureRedis(builder.Configuration);
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("BidLimiter", policy =>
@@ -43,10 +43,13 @@ builder.Services.AddMassTransit(x =>
 {
     // Add consumers (message handlers)
     x.AddConsumer<AuctionCreatedConsumer>();
-
+    x.AddConsumer<AuctionStartedConsumer>();
     // Configure RabbitMQ as the transport
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.ConcurrentMessageLimit = 1;
+        cfg.UseConcurrencyLimit(1);
+
         var rabbitMqSettings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
         cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost, h =>
         {
@@ -65,6 +68,7 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint(rabbitMqSettings.QueueName, e =>
         {
             e.ConfigureConsumer<AuctionCreatedConsumer>(context);
+            e.ConfigureConsumer<AuctionStartedConsumer>(context);
         });
     });
 });
@@ -118,7 +122,10 @@ app.UseRateLimiter();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/health", () =>
+{
+    return "Car bid system Bid service";
+});
 await app.RunAsync();
 
 

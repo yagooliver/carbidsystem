@@ -28,7 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CarBidSystem.Auctions.UseCases\CarBidSystem.Auctions.UseCases.csproj" />
     <ProjectReference Include="..\Plugins\CarBidSystem.Auctions.Plugins.EFCoreSqlServer\CarBidSystem.Auctions.Plugins.EFCoreSqlServer.csproj" />
-    <ProjectReference Include="..\Plugins\CarBidSystem.Auctions.Plugins.InMemory\CarBidSystem.Auctions.Plugins.InMemory.csproj" />
     <ProjectReference Include="..\Plugins\CarBidSystem.Auctions.Plugins.RedisCaching\CarBidSystem.Auctions.Plugins.RedisCaching.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿using CarBidSystem.Auctions.CoreBusiness.DTOs;
 using CarBidSystem.Auctions.CoreBusiness.Entities;
 using CarBidSystem.Auctions.IntegrationTests.Factory;
+using CarBidSystem.Common.Response;
 using FluentAssertions;
 using Newtonsoft.Json;
 using System;
@@ -29,7 +30,7 @@ namespace CarBidSystem.Auctions.IntegrationTests.Controllers
             // Arrange
             var payload = new
             {
-                CarId = 1,
+                CarId = 10,
                 StartTime = DateTime.UtcNow.AddHours(1),
                 EndTime = DateTime.UtcNow.AddHours(2)
             };
@@ -78,21 +79,30 @@ namespace CarBidSystem.Auctions.IntegrationTests.Controllers
         }
 
         [Fact]
-        public async Task GetAuctions_ShouldReturn200_WhenAuctionsExist()
+        public async Task GetAuctions_ShouldReturn200_WithPagination_WhenAuctionsExist()
         {
             // Arrange
             var auction = new Auction(3, DateTime.UtcNow.AddHours(1), DateTime.UtcNow.AddHours(2));
             await _factory.AddAuctionAsync(auction);
 
-            //ACT
-            var response = await _client.GetAsync("/api/auctions");
+            int pageNumber = 1;
+            int pageSize = 10;
+
+            // Act
+            var response = await _client.GetAsync($"/api/auctions?pageNumber={pageNumber}&pageSize={pageSize}");
             var responseStr = await response.Content.ReadAsStringAsync();
-            var auctions = JsonConvert.DeserializeObject<List<AuctionDto>>(responseStr);
+
+            var paginatedResponse = JsonConvert.DeserializeObject<PagedResponse<List<AuctionDto>>>(responseStr);
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
-            auctions.Should().NotBeNull();
-            auctions.Count.Should().BeGreaterThan(0);
+            paginatedResponse.Should().NotBeNull();
+            paginatedResponse?.Data.Should().NotBeNull();
+            paginatedResponse?.Data.Count.Should().BeGreaterThan(0);
+            paginatedResponse?.PageNumber.Should().Be(pageNumber);
+            paginatedResponse?.PageSize.Should().Be(pageSize);
+            paginatedResponse?.TotalRecords.Should().BeGreaterThan(0);
+            paginatedResponse?.Data.Count.Should().BeLessOrEqualTo(pageSize);
         }
 
         [Fact]
