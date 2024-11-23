@@ -43,16 +43,12 @@ $AuctionServicePath = "./src/AuctionService/CarBidSystem.Auctions.Service"
 $BidServicePath = "./src/BidService/CarBidSystem.Bids.Service"
 $GatewayPath = "./src/Gateway/CarBidSystem.Gateway"
 
-# Handle the environment logic
 if ($Environment -eq "Dev") {
     Write-Host "Running in Dev environment..."
 
-    # Ensure docker-compose-dev.yml containers are up and running
     Wait-For-Containers $ComposeDevFile
 
-    # Run .NET apps in separate consoles
     Write-Host "Starting .NET applications in separate consoles..."
-
     Start-Process "powershell" -ArgumentList "dotnet run --project $AuctionServicePath" -NoNewWindow:$false
     Start-Sleep -Seconds 3
     Start-Process "powershell" -ArgumentList "dotnet run --project $BidServicePath" -NoNewWindow:$false
@@ -62,6 +58,5 @@ if ($Environment -eq "Dev") {
 } else {
     Write-Host "Running in default environment..."
 
-    # Just start docker-compose.yml containers
-    Wait-For-Containers $ComposeFile
+    docker-compose -f $ComposeFile up -d
 }
