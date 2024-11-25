@@ -140,7 +140,7 @@ POST http://localhost:9000/auctions
 {
   "CarId": 10,
   "StartTime": "2024-11-23T09:00:00Z",
-  "EndTime": "2024-11-31T09:00:00Z"
+  "EndTime": "2024-12-31T09:00:00Z"
 }
 ```
 
