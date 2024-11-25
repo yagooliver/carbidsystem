@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20241122203230_InitialMigration")]
+    [Migration("20241201213916_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -67,11 +67,11 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 1,
                             CarId = 1,
-                            EndTime = new DateTime(2024, 11, 27, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5143),
+                            EndTime = new DateTime(2025, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6380),
                             HighestBidAmount = 0m,
-                            StartTime = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5143),
+                            StartTime = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6380),
                             State = 0,
-                            UpdatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5158)
+                            UpdatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6397)
                         });
                 });
 
@@ -113,7 +113,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 1,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5011),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6235),
                             Make = "Toyota",
                             Model = "Corolla",
                             StartingPrice = 15000m,
@@ -123,7 +123,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 2,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5013),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6237),
                             Make = "Honda",
                             Model = "Civic",
                             StartingPrice = 16000m,
@@ -133,7 +133,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 3,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5014),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6238),
                             Make = "Ford",
                             Model = "Mustang",
                             StartingPrice = 30000m,
@@ -143,7 +143,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 4,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5015),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6239),
                             Make = "Chevrolet",
                             Model = "Camaro",
                             StartingPrice = 35000m,
@@ -153,7 +153,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 5,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5015),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6239),
                             Make = "Tesla",
                             Model = "Model 3",
                             StartingPrice = 45000m,
@@ -163,7 +163,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 6,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5016),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6240),
                             Make = "BMW",
                             Model = "3 Series",
                             StartingPrice = 25000m,
@@ -173,7 +173,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 7,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5017),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6240),
                             Make = "Mercedes-Benz",
                             Model = "C-Class",
                             StartingPrice = 40000m,
@@ -183,7 +183,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 8,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5017),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6241),
                             Make = "Audi",
                             Model = "A4",
                             StartingPrice = 38000m,
@@ -193,7 +193,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 9,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5018),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6241),
                             Make = "Volkswagen",
                             Model = "Passat",
                             StartingPrice = 20000m,
@@ -203,7 +203,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                         {
                             Id = 10,
                             CarState = 1,
-                            CreatedAt = new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5019),
+                            CreatedAt = new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6242),
                             Make = "Hyundai",
                             Model = "Elantra",
                             StartingPrice = 18000m,

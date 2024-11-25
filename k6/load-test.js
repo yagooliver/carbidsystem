@@ -3,7 +3,7 @@ import { check, sleep, group } from 'k6';
 
 export const options = {
   stages: [
-    { duration: '10s', target: 100 },
+    { duration: '30s', target: 100 },
     { duration: '30s', target: 1000 },
     { duration: '20s', target: 0 },
   ],
@@ -12,6 +12,10 @@ export const options = {
     http_req_failed: ['rate<0.01'],
   },
 };
+// export const options = {
+//   vus: 1000,
+//   duration: '60s',
+// }
 
 export default function () {
   group('Create a Bid', () => {
@@ -34,7 +38,7 @@ export default function () {
     // Perform checks
     check(response, {
       'status is 2xx': (res) => res.status >= 200 && res.status < 300, // Ensure response is successful
-      'response time < 1000ms': (res) => res.timings.duration < 700, // Validate response time
+      'response time < 1000ms': (res) => res.timings.duration < 1000, // Validate response time
     });
 
     sleep(1); // Simulate user wait time

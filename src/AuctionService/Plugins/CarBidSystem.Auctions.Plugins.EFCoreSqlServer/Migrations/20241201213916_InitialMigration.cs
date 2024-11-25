@@ -61,22 +61,22 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer.Migrations
                 columns: new[] { "Id", "CarState", "CreatedAt", "Make", "Model", "StartingPrice", "Year" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5011), "Toyota", "Corolla", 15000m, 2020 },
-                    { 2, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5013), "Honda", "Civic", 16000m, 2019 },
-                    { 3, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5014), "Ford", "Mustang", 30000m, 2021 },
-                    { 4, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5015), "Chevrolet", "Camaro", 35000m, 2022 },
-                    { 5, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5015), "Tesla", "Model 3", 45000m, 2023 },
-                    { 6, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5016), "BMW", "3 Series", 25000m, 2018 },
-                    { 7, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5017), "Mercedes-Benz", "C-Class", 40000m, 2020 },
-                    { 8, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5017), "Audi", "A4", 38000m, 2021 },
-                    { 9, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5018), "Volkswagen", "Passat", 20000m, 2019 },
-                    { 10, 1, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5019), "Hyundai", "Elantra", 18000m, 2022 }
+                    { 1, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6235), "Toyota", "Corolla", 15000m, 2020 },
+                    { 2, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6237), "Honda", "Civic", 16000m, 2019 },
+                    { 3, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6238), "Ford", "Mustang", 30000m, 2021 },
+                    { 4, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6239), "Chevrolet", "Camaro", 35000m, 2022 },
+                    { 5, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6239), "Tesla", "Model 3", 45000m, 2023 },
+                    { 6, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6240), "BMW", "3 Series", 25000m, 2018 },
+                    { 7, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6240), "Mercedes-Benz", "C-Class", 40000m, 2020 },
+                    { 8, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6241), "Audi", "A4", 38000m, 2021 },
+                    { 9, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6241), "Volkswagen", "Passat", 20000m, 2019 },
+                    { 10, 1, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6242), "Hyundai", "Elantra", 18000m, 2022 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Auctions",
                 columns: new[] { "Id", "CarId", "EndTime", "HighestBidAmount", "HighestBidId", "StartTime", "State", "UpdatedAt" },
-                values: new object[] { 1, 1, new DateTime(2024, 11, 27, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5143), 0m, null, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5143), 0, new DateTime(2024, 11, 22, 20, 32, 29, 748, DateTimeKind.Utc).AddTicks(5158) });
+                values: new object[] { 1, 1, new DateTime(2025, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6380), 0m, null, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6380), 0, new DateTime(2024, 12, 1, 21, 39, 14, 540, DateTimeKind.Utc).AddTicks(6397) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auctions_CarId",

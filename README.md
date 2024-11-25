@@ -37,6 +37,7 @@
 - Clean Architecture
 - CQRS
 - Microservices
+- Event-Driven
 
 ## Instructions
 To run this application you must change your directory to the base directory of the project and then execute the following commands: 
@@ -139,7 +140,7 @@ POST http://localhost:9000/auctions
 {
   "CarId": 10,
   "StartTime": "2024-11-23T09:00:00Z",
-  "EndTime": "2024-11-31T09:00:00Z"
+  "EndTime": "2024-12-31T09:00:00Z"
 }
 ```
 

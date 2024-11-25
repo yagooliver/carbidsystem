@@ -45,7 +45,7 @@ namespace CarBidSystem.Auctions.Plugins.EFCoreSqlServer
 
             modelBuilder.Entity<Auction>()
                 .HasData([
-                    new(1, DateTime.UtcNow, DateTime.UtcNow.AddDays(5)) { Id = 1, State = AuctionState.Created},
+                    new(1, DateTime.UtcNow, DateTime.UtcNow.AddDays(365)) { Id = 1, State = AuctionState.Created},
                 ]);
         }
     }

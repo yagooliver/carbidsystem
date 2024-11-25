@@ -70,7 +70,9 @@ services:
       - services-network
 
   auction-service:
-    image: yagooliverce/auction-service:latest
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.auctions
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
@@ -98,7 +100,9 @@ services:
       - elasticsearch
 
   bid-service: 
-    image: yagooliverce/bid-service:latest
+    build: 
+      context: .
+      dockerfile: ./Dockerfile.bids
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
