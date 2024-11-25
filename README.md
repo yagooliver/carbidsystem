@@ -37,6 +37,7 @@
 - Clean Architecture
 - CQRS
 - Microservices
+- Event-Driven
 
 ## Instructions
 To run this application you must change your directory to the base directory of the project and then execute the following commands: 
