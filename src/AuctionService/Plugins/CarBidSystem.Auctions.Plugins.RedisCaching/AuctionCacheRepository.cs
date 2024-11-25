@@ -73,7 +73,6 @@ namespace CarBidSystem.Auctions.Plugins.RedisCaching
 
         public async Task UpdateAuctionAsync(Auction auction)
         {
-            // Update in the underlying database repository
             await auctionRepository.UpdateAuctionAsync(auction);
 
             // Update in Redis cache
