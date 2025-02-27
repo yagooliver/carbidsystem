@@ -44,6 +44,7 @@ builder.Services.AddMassTransit(x =>
     // Add consumers (message handlers)
     x.AddConsumer<AuctionCreatedConsumer>();
     x.AddConsumer<AuctionStartedConsumer>();
+    x.AddConsumer<CreateBidConsumer>();
     // Configure RabbitMQ as the transport
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -69,6 +70,7 @@ builder.Services.AddMassTransit(x =>
         {
             e.ConfigureConsumer<AuctionCreatedConsumer>(context);
             e.ConfigureConsumer<AuctionStartedConsumer>(context);
+            e.ConfigureConsumer<CreateBidConsumer>(context);
         });
     });
 });

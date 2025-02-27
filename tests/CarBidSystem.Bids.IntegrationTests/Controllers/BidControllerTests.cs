@@ -1,4 +1,5 @@
 ﻿using CarBidSystem.Bids.CoreBusiness.DTOs;
+using CarBidSystem.Bids.CoreBusiness.Entities;
 using CarBidSystem.Bids.IntegrationTests.Configurations;
 using CarBidSystem.Common.Response;
 using FluentAssertions;
@@ -95,20 +96,10 @@ namespace CarBidSystem.Bids.IntegrationTests.Controllers
 
         [Fact]
         public async Task GetBid_ShouldReturn200_WhenBidExists()
-        {             
+        {
             // Arrange
-            var payload = new
-            {
-                AuctionId = 1,
-                Amount = 10000,
-                UserId = "test-user"
-            };
-
-            // Act
-            var response = await _client.PostAsJsonAsync("/api/bid", payload);
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+            var payload = new Bid(1, "test-user", 1000);
+            await _factory.AddBidAsync(payload);
 
             // Act
             var bidResponse = await _client.GetAsync($"/api/bid/{1}");
@@ -137,17 +128,8 @@ namespace CarBidSystem.Bids.IntegrationTests.Controllers
         public async Task GetBidsByActionId_ShouldReturn200_WhenBidExists()
         {
             // Arrange
-            var payload = new
-            {
-                AuctionId = 1,
-                Amount = 10000,
-                UserId = "test-user"
-            };
-
-            // Act
-            var response = await _client.PostAsJsonAsync("/api/bid", payload);
-
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+            var payload = new Bid(1, "test-user", 1000);
+            await _factory.AddBidAsync(payload);
 
             int pageNumber = 1;
             int pageSize = 5;

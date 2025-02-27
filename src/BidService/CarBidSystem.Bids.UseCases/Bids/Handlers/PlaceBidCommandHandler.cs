@@ -1,6 +1,7 @@
 ﻿using CarBidSystem.Bids.CoreBusiness.Entities;
 using CarBidSystem.Bids.CoreBusiness.Interfaces;
 using CarBidSystem.Bids.UseCases.Bids.Commands;
+using CarBidSystem.Bids.UseCases.Consumers;
 using CarBidSystem.Common.Models;
 using MassTransit;
 using MediatR;
@@ -32,13 +33,7 @@ namespace CarBidSystem.Bids.UseCases.Bids.Handlers
                 throw new ApplicationException($"This Auction - {auction.AuctionId} has already finished and it's not accepting more bids");
             }
 
-            Bid bid = new(auction.Id, request.UserId, request.Amount);
-
-            await bidRepository.AddAsync(bid);
-
-            Log.Information($"Bid - {bid.Id} saved successfully");
-
-            await publishEndpoint.Publish(new PlaceBidCommandMessage(bid.AuctionId, bid.Amount, bid.Id), cancellationToken);
+            await publishEndpoint.Publish(new CreateBidEvent(auction.Id, request.Amount, request.UserId), cancellationToken);
 
             Log.Information($"PlaceBidCommandMessage sended to the queue");
             Log.Information("Finished: Place bid command handler");
